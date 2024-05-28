@@ -4,11 +4,12 @@
 # hagan los ejercicios
 
 """
-    ✔  1. Mostrar la lista numerada de animales (para poder seleccionar) 
-         1.5. solucionar posibles errores en seleccion
-    2. Poder 'filtrar' la lista de animales, segun el tipo
-    3. Agregar animales a la lista (deben tener los mismos datos,
-    nombre, tipo, peso, color)
+    4. Agregar menu
+        ✔  1. Mostrar la lista numerada de animales (para poder seleccionar) 
+            1.5. solucionar posibles errores en seleccion
+        2. Poder 'filtrar' la lista de animales, segun el tipo
+        3. Agregar animales a la lista (deben tener los mismos datos,
+        nombre, tipo, peso, color)
 """
 
 lista_animales = [
@@ -109,26 +110,53 @@ for x in range(len(lista_animales)):
 
 # Solcion en clases.
 
-for l, animal in enumerate(lista_animales):
-    print(l+1,'. ', animal['nombre'], ' / ', animal['tipo'], sep='')
+opciones_menu = [
+    'mostrar lista animales y seleccionar',
+    'seleccionar por tipo',
+    'agregar animales',
+]
+while (True): #WHILE MENU
+    for i, opcion in enumerate(opciones_menu):
+        print(i+1, opcion)
+    print()
+    while (True):
+        sel = input(">>: ")
+        if (sel.isnumeric()):
+            sel = int(sel)-1
+            if (sel in range(len(opciones_menu))):
+                break
 
-print()
+    if (sel == 0):
+        for i, animal in enumerate(lista_animales):
+            print(i+1,'. ', animal['nombre'],' | ', animal['tipo'], sep='')
+        print()
+        while (True):
+            sel = input("seleccione animal: ")
+            if (sel.isnumeric()):
+                sel = int(sel)-1
+                if (sel in range(len(lista_animales))):
+                    break
 
-sel = int(input("seleccione animal: "))-1
+        animal_seleccionado = lista_animales[sel]
+        print('-'*10)
+        for llave in animal_seleccionado.keys():
+            print(llave,'=>',animal_seleccionado[llave])
+        continue            
+    #end if 0
 
-animal_seleccionado = lista_animales[sel]
-
-print('-'*10)
-
-for llave in animal_seleccionado.keys():
-    print(llave,'=>',animal_seleccionado[llave])
-
-tipo_buscado = input("Ingrese el tipo de animal que desea buscar: ")
-
-for animal in lista_animales:
-    if animal['tipo'] == tipo_buscado:
-        print(
-            animal['nombre'],
-            '=>',
-            animal['tipo']
-        )
+    if (sel == 1):
+        lista_filtrada = []
+        filtro = input('ingrese tipo a filtrar: ').lower()
+        for animal in lista_animales:
+            if animal['tipo'] == filtro:
+                lista_filtrada.append(animal)
+        for i, animal in enumerate(lista_filtrada):
+            print(i+1,'. ', animal['nombre'],' | ', animal['tipo'], sep='')
+        print()
+        input()
+        continue
+    #end if 1
+        
+    if (sel == 2):
+        print("OPCION AUN NO LISTA")
+        continue
