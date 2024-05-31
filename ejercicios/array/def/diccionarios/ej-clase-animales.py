@@ -39,24 +39,92 @@
     
 
 """
-
-def mostrarLista (lista:list) -> None:
+def mostrarLista(lista: list) -> None:
     for i, elemento in enumerate(lista):
-        print(i,'=>',elemento)
+        print(i, '=>', elemento)
 
-def mostrarAnimalLista (lista:list) -> None:
+def mostrarAnimalLista(lista: list) -> None:
     for i, animal in enumerate(lista):
-        print(i+1,'. ', animal['nombre'],' => ', animal['tipo'], sep='')
+        print(i+1, '. ', animal['nombre'], ' => ', animal['tipo'], sep='')
 
-def selOpcion (lista:list,desfase:int=0) -> int:
-    while (True):
+def mostrarDetalleAnimal(animal: dict) -> None:
+    print('-'*10)
+    for llave, valor in animal.items():
+        print(llave, '=>', valor)
+
+def selOpcion(lista: list, desfase: int = 0) -> int:
+    while True:
         sel = input(">> ")
-        if (sel.isnumeric()):
-            sel = int(sel)-desfase
-            if (sel in range(len(lista))):
-                break
-    return sel
+        if sel.isnumeric():
+            sel = int(sel) - desfase
+            if 0 <= sel < len(lista):
+                return sel
+        print("Selección inválida. Intente nuevamente.")
 
+def seleccion_valida(rango: int, seleccion: int) -> bool:
+    return 0 <= seleccion < rango
+
+def agregarAnimal(lista: list) -> None:
+    nombre = input('Ingrese nombre: ')
+    tipo = input('Ingrese tipo: ')
+    peso = float(input('Ingrese peso: '))
+    color = input('Ingrese color: ')
+    if nombre and tipo and peso and color:
+        lista.append({'nombre': nombre, 'tipo': tipo, 'peso': peso, 'color': color})
+    else:
+        print("Datos inválidos. Intente nuevamente.")
+
+def filtrarPorTipo(lista: list) -> None:
+    lista_filtrada = []
+    filtro = input('Ingrese tipo a filtrar: ').lower()
+    for animal in lista:
+        if animal['tipo'] == filtro:
+            lista_filtrada.append(animal)
+    mostrarAnimalLista(lista_filtrada)
+    print()
+    input("Presione Enter para continuar...")  # pausa
+
+def eliminarAnimal(lista: list) -> None:
+    mostrarAnimalLista(lista)
+    print("Seleccione el animal a eliminar:")
+    sel = selOpcion(lista, 1)
+    if seleccion_valida(len(lista), sel):
+        lista.pop(sel)
+        print("Animal eliminado.")
+    else:
+        print("Selección inválida.")
+
+def modificarAnimal(lista: list) -> None:
+    mostrarAnimalLista(lista)
+    print("Seleccione el animal a modificar:")
+    sel = selOpcion(lista, 1)
+    if seleccion_valida(len(lista), sel):
+        animal = lista[sel]
+        print("Seleccione el dato a modificar:")
+        for i, llave in enumerate(animal.keys()):
+            print(i+1, '=>', llave)
+        sel_dato = selOpcion(list(animal.keys()), 1)
+        llave_a_modificar = list(animal.keys())[sel_dato]
+        nuevo_valor = input(f'Ingrese el nuevo valor para {llave_a_modificar}: ')
+        animal[llave_a_modificar] = nuevo_valor
+        print("Animal modificado.")
+    else:
+        print("Selección inválida.")
+
+def agregarDatoAnimal(lista: list) -> None:
+    mostrarAnimalLista(lista)
+    print("Seleccione el animal al que desea agregar un dato:")
+    sel = selOpcion(lista, 1)
+    if seleccion_valida(len(lista), sel):
+        animal = lista[sel]
+        nueva_llave = input('Ingrese la nueva llave: ')
+        nuevo_valor = input('Ingrese el nuevo valor: ')
+        animal[nueva_llave] = nuevo_valor
+        print("Dato agregado.")
+    else:
+        print("Selección inválida.")
+
+# Datos iniciales
 lista_animales = [
     {
         'nombre': 'pepito',
@@ -127,56 +195,53 @@ opciones_menu = [
     'mostrar lista animales y seleccionar',
     'seleccionar por tipo',
     'agregar animales',
-    'mostrar animales guardados'
+    'mostrar animales guardados',
+    'eliminar animal',
+    'modificar animal',
+    'agregar dato a un animal',
 ]
 
-while (True): #WHILE MENU
+# Inicio del programa
+while True:  # WHILE MENU
     mostrarLista(opciones_menu)
     sel = selOpcion(opciones_menu)
 
-    if (sel==0):
+    if sel == 0:
         break
-    
-    if (sel == 1):
+
+    if sel == 1:
         mostrarAnimalLista(lista_animales)
         print()
-        sel = selOpcion(lista_animales,1)
+        sel = selOpcion(lista_animales, 1)
 
         animal_seleccionado = lista_animales[sel]
-        print('-'*10)
-        for llave in animal_seleccionado.keys():
-            print(llave,'=>',animal_seleccionado[llave])
+        mostrarDetalleAnimal(animal_seleccionado)
 
-        if (animal_seleccionado not in animales_guardados):
+        if animal_seleccionado not in animales_guardados:
             animales_guardados.append(animal_seleccionado)
 
-        continue            
-    #end if 0
-
-    if (sel == 2):
-        lista_filtrada = []
-        filtro = input('ingrese tipo a filtrar: ').lower()
-        for animal in lista_animales:
-            if animal['tipo'] == filtro:
-                lista_filtrada.append(animal)
-        mostrarAnimalLista(lista_filtrada)
-        print()
-        input() # pausa
         continue
-    #end if 1
-        
-    #agregar animal a la lista
-    if (sel == 3):
-        #Falta crear validacion de datos
-        lista_animales.append(
-            {
-                'nombre': input('ingrese nombre: '),
-                'tipo' : input('ingrese tipo: '),
-                'peso' : float(input('ingrese peso: ')), 
-                'color' : input('ingrese color: '),
-            }
-        )
 
-    if (sel == 4):
+    if sel == 2:
+        filtrarPorTipo(lista_animales)
+        continue
+
+    if sel == 3:
+        agregarAnimal(lista_animales)
+        continue
+
+    if sel == 4:
         mostrarAnimalLista(animales_guardados)
+        continue
+
+    if sel == 5:
+        eliminarAnimal(lista_animales)
+        continue
+
+    if sel == 6:
+        modificarAnimal(lista_animales)
+        continue
+
+    if sel == 7:
+        agregarDatoAnimal(lista_animales)
         continue
