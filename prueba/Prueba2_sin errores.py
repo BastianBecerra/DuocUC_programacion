@@ -1,7 +1,7 @@
 """
 Un grupo de científicos le pasa una lista con secuencias de ADN.
 
-Cada secuencia es un texto que tiene las letras ‘A’ ‘T’ ‘C’ o ‘G’
+Cada secuencia es un texto que tiene las letras 'A 'T 'C o 'G
 
 Las letras siempre deben ir en pares que son AT o TA o CG o GC, todas separadas por un -
 
@@ -75,7 +75,3 @@ for cadena in lista_adn[len(resultado):]:  # Solo verificar nuevas entradas
         print("BUENO")
     else:
         print("MALO") 
-        
-"""
-Intente darle con un diccionario para poder darle un numero de valor a alguno, no resulto ya que no recibia datos, el intento fuee que  con el for en or poderhacer los datos de la cadena que aun asi me da error en el que esta bueno y la verdad no entendi bien el porque no funciono. bueno intente con and y me sigue recibiendo lo que esta malo, pero para ver si podria haber una solucion para saber si estaba bien el correcto
-"""
